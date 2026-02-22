@@ -1,0 +1,3 @@
+Vytvoř moderní, vizuálně přitažlivou a interaktivní statickou webovou stránku pro společnost vyrábějící stínící techniku, převážně žaluzie. Web by měl mít profesionální, stylový a hravý design s plynulými animacemi a interaktivními prvky. Stránka by měla být plně responzivní pro uživatele stolních počítačů i mobilních zařízení. Mám k dispozici několik fotografií. Použij tyto fotografie na webu. 
+Nedávej na web žádné formuláře ani tlačítka, která by nefungovala, například odesílání e-mailů, nebo přihlašování uživatele. Web musí být jednoduchý, ale vizuálně atraktivní.
+Použij HTML, CSS A JavaScript - veškerý kód napiš do jednoho souboru, aby se mi dobře kopíroval.

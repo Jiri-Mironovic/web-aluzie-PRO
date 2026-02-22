@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Žaluzie PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ral: #89AC76;
+    --bg-dark: #071021;
+    --muted: #9aa4b2;
+    --surface: #0b1220;
+    --accent: #ffb86b;
+    --radius: 16px;
+    --gap: 24px;
+    --shadow: 0 8px 30px rgba(2,6,23,0.6);
+  }
+
+  *{box-sizing:border-box; scroll-behavior: smooth;}
+  body{
+    margin:0; font-family:Inter, sans-serif;
+    background: linear-gradient(180deg,var(--bg-dark), #081122 60%);
+    color:#e6eef8; line-height:1.4;
+  }
+
+  header{
+    position:fixed; inset:0 0 auto 0; z-index:60;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:8px 24px; background: var(--ral); color: #000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    min-height: 70px;
+  }
+
+  .logo{display:flex; align-items:center; gap:16px;}
+  .logo img{height:40px; width:auto;}
+  
+  .logo-label{
+    color:#000; font-size:0.8rem; font-weight:700; border-left: 2px solid rgba(0,0,0,0.15);
+    padding-left: 16px; 
+    display: flex; flex-direction: column; justify-content: center;
+    line-height: 1.2;
+    max-width: 450px;
+  }
+
+  nav{ display: flex; align-items: center; gap: 15px; }
+  nav a{color:#000; text-decoration:none; font-weight:700; font-size: 0.95rem; white-space: nowrap;}
+  nav a.ig-link { color: #fff; background: #000; padding: 6px 12px; border-radius: 6px; }
+
+  main{padding-top:100px}
+  .hero{min-height:70vh; display:grid; grid-template-columns:1fr 420px; gap:var(--gap); padding:36px; max-width:1200px; margin:0 auto; align-items:center;}
+  .hero-card{background: rgba(255,255,255,0.03); border-radius:var(--radius); padding:28px; border:1px solid rgba(255,255,255,0.03)}
+  .eyebrow{color: var(--ral); font-weight: 800; font-size: 2.5rem; line-height: 1.1; margin-bottom: 10px;}
+  h1{font-family:"Playfair Display",serif; font-size:2.4rem; margin:12px 0; color:#fff}
+
+  .section{max-width:1200px; margin:40px auto; padding:0 20px; scroll-margin-top: 120px;}
+  
+  .filter-menu { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+  .filter-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s;
+  }
+  .filter-btn:hover { background: rgba(255,255,255,0.1); }
+  .filter-btn.active { background: var(--ral); color: #000; border-color: var(--ral); }
+
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .card {
+    position: relative; border-radius: 12px; overflow: hidden; background: var(--surface);
+    height: 250px; cursor: pointer; border: 1px solid rgba(255,255,255,0.03);
+  }
+  .card.hidden { display: none; }
+  .card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .card:hover img { transform: scale(1.08); }
+
+  #lightbox {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  #lightbox img { max-width: 100%; max-height: 90vh; border-radius: 4px; }
+  #lightbox-close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 50px; cursor: pointer; font-weight: 300; }
+
+  .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .contact-item { background: rgba(255,255,255,0.03); padding: 24px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.03); }
+  .contact-item h3 { margin-top: 0; color: #fff; font-size: 1.3rem; }
+  .contact-item .position { color: var(--ral); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; margin-bottom: 12px; letter-spacing: 0.05em; }
+  .contact-item a { color: #fff; text-decoration: none; font-weight: 600; }
+  .contact-item.ig-card { border: 1px solid var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+
+  @media (max-width: 1100px) {
+    .logo-label { max-width: 300px; font-size: 0.75rem; }
+  }
+
+  @media (max-width: 900px) {
+    header { flex-direction: column; padding: 15px; height: auto; }
+    .logo-label { border-left: none; padding-left: 0; text-align: center; margin: 10px 0; max-width: none; }
+    nav { margin-top: 10px; }
+    .hero, .contact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="logo.jpeg" alt="Logo Žaluzie PRO">
+    <div class="logo-label">
+      <span>Žaluzie, rolety, screeny, parapety,</span>
+      <span>sítě proti hmyzu, bioklimatické pergoly, garážová vrata</span>
+    </div>
+  </div>
+  <nav>
+    <a href="#home">Domů</a>
+    <a href="#produkty">Produkty</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="https://www.instagram.com/zaluzie_pro/" target="_blank" class="ig-link">Instagram</a>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">Stínění na míru</div>
+      <h1>Poradíme si s velkými rozměry i s technicky náročnými detaily.</h1>
+      <p style="color: var(--muted); font-size: 1.1rem;">Žádná sériová výroba, projektujeme na míru. Nic není nemožné.</p>
+    </div>
+    <div style="border-radius:16px; overflow:hidden; height:450px; box-shadow: var(--shadow);">
+        <img src="photo-hero.jpg" style="width:100%; height:100%; object-fit:cover;">
+    </div>
+  </section>
+
+  <section id="produkty" class="section">
+    <h2 style="font-family:'Playfair Display', serif; font-size: 2.2rem; color: #fff; margin-bottom: 30px;">Naše realizace</h2>
+    
+    <div class="filter-menu">
+      <button class="filter-btn active" onclick="filterGallery('zaluzie', this)">Žaluzie</button>
+      <button class="filter-btn" onclick="filterGallery('rolety', this)">Rolety</button>
+      <button class="filter-btn" onclick="filterGallery('screeny', this)">Screeny</button>
+      <button class="filter-btn" onclick="filterGallery('parapety', this)">Parapety</button>
+      <button class="filter-btn" onclick="filterGallery('site', this)">Sítě proti hmyzu</button>
+      <button class="filter-btn" onclick="filterGallery('pergoly', this)">Bioklimatické pergoly</button>
+      <button class="filter-btn" onclick="filterGallery('vrata', this)">Garážová vrata</button>
+    </div>
+    
+    <div class="gallery">
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/1.jpg" alt="Žaluzie"></figure>
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/2.jpg" alt="Žaluzie"></figure>
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/3.jpg" alt="Žaluzie"></figure>
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/4.jpg" alt="Žaluzie"></figure>
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/5.jpg" alt="Žaluzie"></figure>
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/6.jpg" alt="Žaluzie"></figure>
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/7.jpg" alt="Žaluzie"></figure>
+      <figure class="card" data-category="zaluzie" onclick="openLightbox(this)"><img src="foto-zaluzie/8.jpg" alt="Žaluzie"></figure>
+
+      <figure class="card hidden" data-category="rolety" onclick="openLightbox(this)"><img src="foto-rolety/1.jpg" alt="Rolety"></figure>
+
+      <figure class="card hidden" data-category="screeny" onclick="openLightbox(this)"><img src="foto-screeny/1.jpg" alt="Screeny"></figure>
+      <figure class="card hidden" data-category="screeny" onclick="openLightbox(this)"><img src="foto-screeny/2.jpg" alt="Screeny"></figure>
+
+      <figure class="card hidden" data-category="parapety" onclick="openLightbox(this)"><img src="foto-parapety/1.jpg" alt="Parapety"></figure>
+      <figure class="card hidden" data-category="parapety" onclick="openLightbox(this)"><img src="foto-parapety/2.jpg" alt="Parapety"></figure>
+      <figure class="card hidden" data-category="parapety" onclick="openLightbox(this)"><img src="foto-parapety/3.jpg" alt="Parapety"></figure>
+
+      <figure class="card hidden" data-category="site" onclick="openLightbox(this)"><img src="foto-site/1.jpg" alt="Sítě proti hmyzu"></figure>
+      <figure class="card hidden" data-category="site" onclick="openLightbox(this)"><img src="foto-site/2.jpg" alt="Sítě proti hmyzu"></figure>
+      <figure class="card hidden" data-category="site" onclick="openLightbox(this)"><img src="foto-site/3.jpg" alt="Sítě proti hmyzu"></figure>
+
+      <figure class="card hidden" data-category="pergoly" onclick="openLightbox(this)"><img src="foto-pergoly/1.jpg" alt="Bioklimatické pergoly"></figure>
+      <figure class="card hidden" data-category="pergoly" onclick="openLightbox(this)"><img src="foto-pergoly/2.jpg" alt="Bioklimatické pergoly"></figure>
+
+      <figure class="card hidden" data-category="vrata" onclick="openLightbox(this)"><img src="foto-vrata/1.jpeg" alt="Garážová vrata"></figure>
+      <figure class="card hidden" data-category="vrata" onclick="openLightbox(this)"><img src="foto-vrata/2.jpeg" alt="Garážová vrata"></figure>
+    </div>
+  </section>
+
+  <section id="kontakt" class="section">
+    <h2 style="font-family:'Playfair Display', serif; font-size: 2.2rem; color: #fff; margin-bottom: 30px;">Kontaktujte nás</h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <h3>Jakub Šíma</h3>
+        <div class="position">majitel firmy, jednatel</div>
+        <p>E-mail: <a href="mailto:sima@zaluziepro.cz">sima@zaluziepro.cz</a><br><br>
+        Tel: <a href="tel:+420773731021">773 731 021</a></p>
+      </div>
+      <div class="contact-item">
+        <h3>Jiří Mironovič</h3>
+        <div class="position">technolog</div>
+        <p>E-mail: <a href="mailto:technolog@zaluziepro.cz">technolog@zaluziepro.cz</a><br><br>
+        Tel: <a href="tel:+420733122994">733 122 994</a></p>
+      </div>
+      <div class="contact-item ig-card">
+        <h3 style="color: var(--accent);">Instagram</h3>
+        <div class="position">Sledujte naši práci</div>
+        <p>Inspirace a novinky přímo z terénu.</p>
+        <a href="https://www.instagram.com/zaluzie_pro/" target="_blank" style="display: inline-block; background: var(--accent); color: #000; padding: 12px 24px; border-radius: 8px; margin-top: 15px;">@zaluzie_pro</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="lightbox" onclick="this.style.display='none'">
+    <span id="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="">
+</div>
+
+<script>
+  function filterGallery(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.card').forEach(card => {
+      card.classList.toggle('hidden', card.dataset.category !== category);
+    });
+  }
+  function openLightbox(element) {
+    const src = element.querySelector('img').src;
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').style.display = 'flex';
+  }
+</script>
+</body>
+</html>
