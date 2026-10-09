@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Žaluzie PRO – Stínění a sítě na míru</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ral: #89AC76; /* Šalvějová zelená */
+    --ral-dark: #6e8e5d;
+    --ral-light: #f1f6ef;
+    --bg-main: #e2e2e7;
+    --card-bg: #ffffff;
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04);
+  }
+
+  * { box-sizing: border-box; scroll-behavior: smooth; }
+  
+  body {
+    margin: 0;
+    font-family: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #0b0b0c;
+    color: var(--text-primary);
+    line-height: 1.47;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Černá Apple Hlavička */
+  header {
+    position: fixed;
+    top: 0; inset-inline: 0;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 0 24px;
+    background: #000000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 110px;
+    overflow: hidden;
+  }
+
+  .header-left { display: flex; align-items: center; }
+
+  .logo { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    grid-column: 2; 
+    height: 100%; 
+    overflow: hidden;
+  }
+  .logo img { 
+    height: 240px; 
+    width: auto; 
+    display: block;
+    filter: invert(100%) brightness(200%);
+    object-fit: cover;
+    margin: -50px 0;
+  }
+
+  nav { grid-column: 3; display: flex; align-items: center; justify-content: flex-end; gap: 24px; }
+  nav a { color: #f5f5f7; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: opacity 0.2s; font-family: 'Jost', sans-serif; }
+  nav a:hover { opacity: 0.7; }
+  nav a.ig-link { 
+    color: #000000; 
+    background: #ffffff; 
+    padding: 8px 18px; 
+    border-radius: 980px; 
+    font-weight: 600; 
+    transition: transform 0.2s, background 0.2s;
+  }
+  nav a.ig-link:hover { opacity: 1; background: #e5e5e5; transform: scale(1.02); }
+
+  main { padding-top: 110px; background: #0b0b0c; }
+
+  /* Úvodní Hero Sekce */
+  .hero { width: 100%; margin: 0; padding: 0; }
+
+  .hero-banner-overlay {
+    position: relative;
+    background: #0b0b0c;
+    width: 100%;
+    height: 680px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px 80px;
+  }
+
+  .hero-banner-overlay img.hero-bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 0;
+  }
+
+  .hero-banner-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11, 11, 12, 0) 50%, rgba(11, 11, 12, 0.8) 80%, #0b0b0c 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-content-wrapper {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: flex-start;
+  }
+
+  .hero-title {
+    font-size: 3.8rem;
+    line-height: 1.2;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+    font-family: 'Jost', sans-serif;
+    display: inline-block;
+    padding-bottom: 8px;
+    border-bottom: 5px solid var(--ral);
+  }
+
+  .hero-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hero-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    transition: color 0.2s;
+    font-family: 'Jost', sans-serif;
+  }
+
+  .hero-list li:hover { color: var(--ral); }
+
+  .hero-dot {
+    width: 7px;
+    height: 7px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  }
+
+  /* Sekce produktů – Apple Glass dlaždice */
+  .products-wrapper { background: #0b0b0c; padding: 20px 0 60px 0; }
+  .section { max-width: 1600px; margin: 0 auto; padding: 0 16px; }
+  .section-title { font-size: 2.2rem; font-weight: 600; color: var(--ral); margin-bottom: 24px; font-family: 'Jost', sans-serif; }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .product-tile {
+    position: relative;
+    background: #000000;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    height: 400px;
+    display: flex;
+    align-items: flex-end;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .product-tile:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(137, 172, 118, 0.15);
+    border-color: rgba(137, 172, 118, 0.4);
+    z-index: 2;
+  }
+
+  .tile-media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .tile-media img.zoom-effect {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 4.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  
+  .product-tile:hover .tile-media img.zoom-effect {
+    transform: scale(1.15) translate(-2%, -2%);
+  }
+
+  .tile-media video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Jemný tmavý přechod nad médiem pro lepší čitelnost skleněného štítku */
+  .tile-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%);
+    pointer-events: none;
+  }
+
+  /* Apple Glass plovoucí štítek */
+  .tile-glass-badge {
+    position: relative;
+    z-index: 2;
+    margin: 24px;
+    padding: 14px 24px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 980px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .product-tile:hover .tile-glass-badge {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.02);
+  }
+
+  .tile-title {
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #ffffff;
+    margin: 0;
+    font-family: 'Jost', sans-serif;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+
+  /* Zápatí */
+  .contact-section {
+    max-width: 1600px; margin: 0 auto; padding: 80px 16px;
+    background: linear-gradient(180deg, #0b0b0c 0%, var(--bg-main) 30%, var(--bg-main) 100%);
+  }
+  .contact-section .section-title { color: var(--text-primary); font-family: 'Jost', sans-serif; }
+
+  .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  
+  .contact-item {
+    background: var(--card-bg); padding: 36px 32px; border-radius: 24px;
+    box-shadow: var(--shadow-soft); border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .contact-item h3 { margin: 0 0 16px 0; font-size: 1.4rem; font-weight: 600; font-family: 'Jost', sans-serif; }
+  .contact-item .position { color: var(--ral-dark); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; margin-bottom: 20px; font-family: 'Jost', sans-serif; }
+  .contact-item p { color: var(--text-secondary); font-size: 0.95rem; margin: 0; line-height: 1.6; font-family: 'Jost', sans-serif; }
+  .contact-item a { color: var(--text-primary); text-decoration: none; font-weight: 600; font-family: 'Jost', sans-serif; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+
+  .modal-window {
+    background: var(--card-bg); border-radius: 24px; max-width: 900px; width: 100%; max-height: 90vh;
+    overflow-y: auto; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25); position: relative;
+    animation: modalUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes modalUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute; top: 20px; right: 24px;
+    background: rgba(0, 0, 0, 0.06); border: none; width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer; font-size: 20px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center; z-index: 10;
+  }
+  .modal-close:hover { background: rgba(0,0,0,0.12); }
+
+  .modal-body { padding: 40px; font-family: 'Jost', sans-serif; }
+  .modal-tag { color: var(--ral-dark); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .modal-title { font-size: 2.2rem; font-weight: 600; margin: 8px 0 16px 0; }
+  .modal-text { color: var(--text-primary); font-size: 1.05rem; line-height: 1.6; margin-bottom: 24px; }
+
+  .modal-section-divider {
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .modal-subheading {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 16px 0 12px 0;
+  }
+
+  .modal-header-img { 
+    width: 100%; 
+    height: 420px; 
+    object-fit: cover; 
+    object-position: center; 
+    border-radius: 12px; 
+    margin-bottom: 20px; 
+  }
+
+  .tech-features {
+    background: var(--ral-light); border-radius: 12px;
+    padding: 24px; margin-bottom: 28px; border: 1px solid rgba(137, 172, 118, 0.2);
+  }
+  .tech-features h4 { margin: 0 0 12px 0; color: var(--ral-dark); font-size: 1.1rem; }
+  .tech-features ul { margin: 0; padding-left: 20px; color: var(--text-primary); }
+  .tech-features li { margin-bottom: 8px; font-size: 0.95rem; }
+
+  .modal-gallery-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; }
+  .modal-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
+  .modal-gallery-grid img { 
+    width: 100%; 
+    height: 140px; 
+    object-fit: cover; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: transform 0.2s ease, opacity 0.2s ease; 
+  }
+  .modal-gallery-grid img:hover { transform: scale(1.03); opacity: 0.9; }
+
+  .modal-gallery-grid video { 
+    width: 100%; 
+    height: 140px; 
+    object-fit: cover; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    background: #000;
+    transition: transform 0.2s ease, opacity 0.2s ease; 
+  }
+  .modal-gallery-grid video:hover { transform: scale(1.03); opacity: 0.9; }
+
+  .lightbox-overlay {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    display: none; align-items: center; justify-content: center; padding: 30px;
+    cursor: zoom-out;
+  }
+  .lightbox-overlay img, .lightbox-overlay video {
+    max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+
+  .btn-poptavka {
+    display: inline-block; background: var(--ral); color: #fff;
+    padding: 14px 28px; border-radius: 980px; text-decoration: none;
+    font-weight: 600; margin-top: 28px; transition: background 0.2s;
+  }
+  .btn-poptavka:hover { background: var(--ral-dark); }
+
+  @media (max-width: 900px) {
+    .product-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .hero-banner-overlay { padding: 40px 24px; height: 560px; }
+  }
+
+  @media (max-width: 768px) {
+    header { 
+      grid-template-columns: 1fr; gap: 12px; padding: 12px 16px; justify-items: center; height: auto; min-height: 110px;
+    }
+    .header-left { display: none; }
+    .logo { grid-column: 1; }
+    .logo img { height: 160px; margin: -35px 0; }
+    nav { grid-column: 1; justify-content: center; gap: 16px; }
+    main { padding-top: 160px; }
+    .hero-banner-overlay { height: 500px; }
+    .hero-title { font-size: 2.4rem; }
+    .modal-body { padding: 24px; }
+    .modal-header-img { height: 280px; }
+    .product-tile { height: 320px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left"></div>
+  <div class="logo">
+    <img src="logo.jpeg" alt="Logo Žaluzie PRO">
+  </div>
+  <nav>
+    <a href="#home">Domů</a>
+    <a href="#produkty">Produkty</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="https://www.instagram.com/zaluzie_pro/" target="_blank" class="ig-link">Instagram</a>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="hero">
+    <div class="hero-banner-overlay">
+      <img src="hero.jpg" alt="Realizace stínění na míru" class="hero-bg-img">
+      
+      <div class="hero-content-wrapper">
+        <h1 class="hero-title">Čistě a na míru</h1>
+        <ul class="hero-list">
+          <li><span class="hero-dot"></span>Žaluzie</li>
+          <li><span class="hero-dot"></span>Rolety</li>
+          <li><span class="hero-dot"></span>Markýzy</li>
+          <li><span class="hero-dot"></span>Sítě proti hmyzu</li>
+          <li><span class="hero-dot"></span>Parapety</li>
+          <li><span class="hero-dot"></span>Bioklimatické pergoly</li>
+          <li><span class="hero-dot"></span>Garážová vrata</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Produktové řady -->
+  <div class="products-wrapper">
+    <section id="produkty" class="section">
+      <h2 class="section-title">Produktové řady</h2>
+      
+      <div class="product-grid">
+        
+        <!-- 1. Venkovní žaluzie -->
+        <div class="product-tile" onclick="openDetail('venkovni-zaluzie')">
+          <div class="tile-media">
+            <video muted loop playsinline preload="metadata">
+              <source src="video-zazdivaci.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="tile-glass-badge">
+            <h3 class="tile-title">Venkovní žaluzie</h3>
+          </div>
+        </div>
+
+        <!-- 2. Screeny -->
+        <div class="product-tile" onclick="openDetail('screeny')">
+          <div class="tile-media">
+            <video muted loop playsinline preload="metadata">
+              <source src="foto-screeny/dodatecne/1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="tile-glass-badge">
+            <h3 class="tile-title">Screeny</h3>
+          </div>
+        </div>
+
+        <!-- 3. Venkovní rolety -->
+        <div class="product-tile" onclick="openDetail('venkovni-rolety')">
+          <div class="tile-media">
+            <video muted loop playsinline preload="metadata">
+              <source src="foto-rolety/3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="tile-glass-badge">
+            <h3 class="tile-title">Venkovní rolety</h3>
+          </div>
+        </div>
+
+        <!-- 4. Sítě proti hmyzu -->
+        <div class="product-tile" onclick="openDetail('site-proti-hmyzu')">
+          <div class="tile-media">
+            <video muted loop playsinline preload="metadata">
+              <source src="foto-site/plise site/1.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="tile-glass-badge">
+            <h3 class="tile-title">Sítě proti hmyzu</h3>
+          </div>
+        </div>
+
+        <!-- 5. Parapety -->
+        <div class="product-tile" onclick="openDetail('parapety')">
+          <div class="tile-media">
+            <img src="foto-parapety/3.jpg" alt="Parapety" class="zoom-effect">
+          </div>
+          <div class="tile-glass-badge">
+            <h3 class="tile-title">Parapety</h3>
+          </div>
+        </div>
+
+        <!-- 6. Bioklimatické pergoly -->
+        <div class="product-tile" onclick="openDetail('pergoly')">
+          <div class="tile-media">
+            <img src="foto-pergoly/1.jpg" alt="Bioklimatické pergoly" class="zoom-effect">
+          </div>
+          <div class="tile-glass-badge">
+            <h3 class="tile-title">Bioklimatické pergoly</h3>
+          </div>
+        </div>
+
+        <!-- 7. Garážová vrata -->
+        <div class="product-tile" onclick="openDetail('vrata')">
+          <div class="tile-media">
+            <img src="foto-vrata/1.jpeg" alt="Garážová vrata" class="zoom-effect">
+          </div>
+          <div class="tile-glass-badge">
+            <h3 class="tile-title">Garážová vrata</h3>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <section id="kontakt" class="contact-section">
+    <h2 class="section-title">Kontaktujte nás</h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <h3>Jakub Šíma</h3>
+        <div class="position">Obchodní zástupce</div>
+        <p>E-mail: <a href="mailto:sima@zaluziepro.cz">sima@zaluziepro.cz</a><br><br>
+        Tel: <a href="tel:+420773731021">773 731 021</a></p>
+      </div>
+      <div class="contact-item">
+        <h3>Sídlo společnosti</h3>
+        <p><strong>Žaluzie PRO s.r.o.</strong><br>
+        Šumperská 529<br>
+        783 91 Uničov<br><br>
+        IČO: 22626298<br><br>
+        E-mail pro poptávky: <a href="mailto:info@zaluziepro.cz">info@zaluziepro.cz</a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Modal -->
+<div id="product-modal" class="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-window">
+    <button class="modal-close" onclick="closeModalDirect()">&times;</button>
+    <div class="modal-body" id="modal-content-area"></div>
+  </div>
+</div>
+
+<!-- Lightbox pro zvětšení fotek a videí -->
+<div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+  <div id="lightbox-content-container"></div>
+</div>
+
+<script>
+  document.querySelectorAll('.product-tile').forEach(tile => {
+    const video = tile.querySelector('video');
+    if (video) {
+      tile.addEventListener('mouseenter', () => video.play().catch(() => {}));
+      tile.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+    }
+  });
+
+  const products = {
+    'venkovni-zaluzie': {
+      isDouble: true,
+      tag: 'Venkovní stínění',
+      title: 'Venkovní žaluzie',
+      part1: {
+        subtitle: 'Zazdívací podomítkové žaluzie',
+        img: 'foto-zaluzie/zazdivaci/1.jpg',
+        text: 'Podomítkové žaluzie představují technologicky i esteticky nejčistší řešení venkovního stínění. Box žaluzie je kompletně schovaný pod fasádou, takže při vytažených žaluziích zůstává architektura domu zcela čistá a bez rušivých prvků.',
+        features: [
+          'Celopláštěné schránky/boxy vyrobené z robustního 2mm plechu pro maximální pevnost',
+          'Celistvé vodicí lišty kotvené přímo na okenní rám pro naprostou stabilitu',
+          'Kompletní přerušení tepelných mostů pod boxem pro energeticky úsporné domy',
+          'Plynulé naklápění lamel pro precizní regulaci světla v interiéru'
+        ],
+        gallery: [
+          'foto-zaluzie/zazdivaci/1.jpg',
+          'foto-zaluzie/zazdivaci/2.jpg',
+          'foto-zaluzie/zazdivaci/3.jpg',
+          'foto-zaluzie/zazdivaci/4.jpg',
+          'foto-zaluzie/zazdivaci/5.jpg',
+          'foto-zaluzie/zazdivaci/6.jpg',
+          'foto-zaluzie/zazdivaci/7.jpg',
+          'foto-zaluzie/zazdivaci/8.jpg',
+          'foto-zaluzie/zazdivaci/9.jpg',
+          'foto-zaluzie/zazdivaci/10.jpg',
+          'foto-zaluzie/zazdivaci/11.jpg',
+          'foto-zaluzie/zazdivaci/12.jpg'
+        ]
+      },
+      part2: {
+        subtitle: 'Žaluzie pro dodatečnou montáž',
+        img: 'foto-zaluzie/dodatecne/1.jpg',
+        text: 'Ideální volba pro hotové stavby nebo objekty, kde již nelze zasahovat do fasády. Krycí plechy chrání vytažený svazek lamel před povětrnostními vlivy a tvarově i barevně navazují na rám okna.',
+        features: [
+          'Celopláštěné schránky/boxy vyrobené z robustního 2mm plechu pro maximální pevnost',
+          'Celistvé vodicí lišty montované přímo na rám okna',
+          'Rychlá montáž bez nutnosti stavebních úprav fasády'
+        ],
+        gallery: [
+          'foto-zaluzie/dodatecne/1.jpg',
+          'foto-zaluzie/dodatecne/2.jpg',
+          'foto-zaluzie/dodatecne/3.jpg',
+          'foto-zaluzie/dodatecne/4.jpg',
+          'foto-zaluzie/dodatecne/5.jpg',
+          'foto-zaluzie/dodatecne/6.jpg',
+          'foto-zaluzie/dodatecne/7.jpg',
+          'foto-zaluzie/dodatecne/8.jpg'
+        ]
+      }
+    },
+    'screeny': {
+      isDouble: true,
+      tag: 'Látkové stínění',
+      title: 'Screeny',
+      part1: {
+        subtitle: 'Zazdívací podomítkové screeny',
+        img: 'foto-screeny/zazdivaci/1.jpg',
+        text: 'Podomítkové screenové rolety představují moderní a elegantní prvek exteriérového stínění. Box rolety je zcela skryt pod omítkou a vodicí lišty jsou zapuštěné, čímž nenarušují čisté linie fasády.',
+        features: [
+          'Účinná regulace slunečního svitu při zachování vizuálního kontaktu s okolím',
+          'Vysoká odolnost vůči povětrnostním vlivům a větru díky bočnímu ZIP systému',
+          'Výrazná úspora nákladů na klimatizaci a chlazení interiéru'
+        ],
+        gallery: [
+          'foto-screeny/zazdivaci/1.jpg',
+          'foto-screeny/zazdivaci/2.jpg',
+          'foto-screeny/zazdivaci/3.jpg',
+          'foto-screeny/zazdivaci/4.jpg',
+          'foto-screeny/zazdivaci/5.jpg',
+          'foto-screeny/zazdivaci/6.jpg',
+          'foto-screeny/zazdivaci/7.jpg'
+        ],
+        type: 'image'
+      },
+      part2: {
+        subtitle: 'Screeny pro dodatečnou montáž',
+        img: 'foto-screeny/dodatecne/1.mp4',
+        text: 'Ideální řešení pro již dokončené objekty a domy, kde nebyla příprava na podomítkové boxy. Krycí boxy esteticky navazují na exteriér a montáž probíhá bez nutnosti zásahů do zateplení či fasády.',
+        features: [
+          'Jednoduchá a rychlá dodatečná montáž bez stavebních úprav',
+          'Perfektní ochrana před přehříváním interiéru při zachování světelné pohody'
+        ],
+        gallery: [
+          'foto-screeny/dodatecne/1.mp4',
+          'foto-screeny/dodatecne/2.mp4',
+          'foto-screeny/dodatecne/3.mp4',
+          'foto-screeny/dodatecne/4.jpg',
+          'foto-screeny/dodatecne/5.jpg',
+          'foto-screeny/dodatecne/6.jpg',
+          'foto-screeny/dodatecne/7.jpg'
+        ],
+        type: 'mixed'
+      }
+    },
+    'venkovni-rolety': {
+      tag: 'Venkovní stínění',
+      title: 'Venkovní rolety',
+      single: {
+        img: 'foto-rolety/1.jpg',
+        text: 'Venkovní rolety poskytují maximální stupeň zatemnění a vynikající tepelně izolační vlastnosti. Účinně chrání interiér před horkem v létě a únikem tepla v chladných měsících, přičemž výrazně snižují hladinu venkovního hluku.',
+        features: [
+          'Vynikající tepelná a akustická izolace pro úsporu energie',
+          'Úplné zatemnění interiéru pro klidný spánek a soukromí',
+          'Zvýšená ochrana domu před vloupáním a nepřízní počasí'
+        ],
+        gallery: [
+          'foto-rolety/1.jpg',
+          'foto-rolety/2.jpg',
+          'foto-rolety/3.mp4'
+        ]
+      }
+    },
+    'site-proti-hmyzu': {
+      isTriple: true,
+      tag: 'Sítě proti hmyzu',
+      title: 'Sítě proti hmyzu',
+      part1: {
+        subtitle: 'Plisé sítě',
+        img: 'foto-site/plise site/4.jpg',
+        text: 'Skládaná plisé síť je ideálním řešením pro velkoplošné terasové dveře a HS portály. Vyznačuje se velmi lehkým chodem a zcela bezbariérovým provedením bez vysokých prahů.',
+        features: [
+          'Zcela bezbariérový spodní profil pro pohodlný přechod',
+          'Plynulý a tichý pojezd vhodný pro každodenní používání',
+          'Odolná skládaná síťovina odolná vůči mechanickému poškození'
+        ],
+        gallery: [
+          'foto-site/plise site/1.mp4',
+          'foto-site/plise site/2.mp4',
+          'foto-site/plise site/3.mp4',
+          'foto-site/plise site/4.jpg',
+          'foto-site/plise site/5.jpg',
+          'foto-site/plise site/6.jpg',
+          'foto-site/plise site/7.jpg',
+          'foto-site/plise site/8.jpg',
+          'foto-site/plise site/9.jpg'
+        ]
+      },
+      part2: {
+        subtitle: 'Rámové sítě',
+        img: 'foto-site/ramove site/1.jpg',
+        text: 'Tradiční a maximálně spolehlivé řešení ochrany proti hmyzu pro standardní otevíravá okna. Rám je vyroben z pevného extrudovaného hliníku s dlouhou životností.',
+        features: [
+          'Montáž bez nutnosti vrtání do okenního rámu pomocí otočných háčků',
+          'Kvalitní sklolaminátová síťovina odolná vůči UV záření',
+          'Snadná sezónní demontáž a bezúdržbový provoz'
+        ],
+        gallery: [
+          'foto-site/ramove site/1.jpg',
+          'foto-site/ramove site/2.jpg'
+        ]
+      },
+      part3: {
+        subtitle: 'Rolovací sítě',
+        img: 'foto-site/rolovaci site/1.mp4',
+        text: 'Rolovací sítě fungují na principu navíjení do horního boxu, což umožňuje síť kdykoliv jednoduše vytáhnout nebo schovat podle aktuální potřeby.',
+        features: [
+          'Praktické navíjení do elegantního hliníkového boxu',
+          'Ideální volba pro okna i střešní výlezy',
+          'Pohodlné ovládání s dojezdovou brzdou',
+          'Možnost integrování pod žaluzii/roletu'
+        ],
+        gallery: [
+          'foto-site/rolovaci site/1.mp4',
+          'foto-site/rolovaci site/2.mp4'
+        ]
+      }
+    },
+    'parapety': {
+      tag: 'Doplňky k okním',
+      title: 'Parapety',
+      single: {
+        img: 'foto-parapety/3.jpg',
+        text: 'Kvalitní venkovní parapety vyrobené z 2mm plechu tvoří dokonalý estetický i funkční prvek každého okna. Spolehlivě odvádějí kondenzát a dešťovou vodu a chrání fasádu.',
+        features: [
+          'Vysoká mechanická odolnost a stálobarevnost materiálů',
+          'Dokonalé napojení na okenní rám a ochrana zdiva',
+          'Široký výběr barevných dekorů a povrchových úprav',
+          'Systémové spojení s vodící lištou zajišťuje odtok kondenzátu přímo na parapet.'
+        ],
+        gallery: [
+          'foto-parapety/1.jpg',
+          'foto-parapety/2.jpg',
+          'foto-parapety/3.jpg',
+          'foto-parapety/4.jpg',
+          'foto-parapety/5.jpg'
+        ]
+      }
+    },
+    'pergoly': {
+      tag: 'Venkovní komfort',
+      title: 'Bioklimatické pergoly',
+      single: {
+        img: 'foto-pergoly/1.jpg',
+        text: 'Hliníkové pergoly s naklápěcími lamelami představují špičku v oblasti zastřešení teras. Umožňují plynulé větrání i ochranu před deštěm.',
+        features: [
+          'Integrovatelný odvod vody přímo uvnitř nosných sloupů',
+          'Možnost osazení bočními screenovými roletami nebo LED osvětlením'
+        ],
+        gallery: ['foto-pergoly/1.jpg', 'foto-pergoly/2.jpg']
+      }
+    },
+    'vrata': {
+      tag: 'Uzavření objektu',
+      title: 'Garážová vrata',
+      single: {
+        img: 'foto-vrata/1.jpeg',
+        text: 'Sekční garážová vrata s vysokými tepelně izolačními vlastnostmi a tichým pohonem.',
+        features: [
+          'Sendvičové sekce s PUR pěnou pro vysoký izolační standard',
+          'Bezpečnostní pojistky proti přetržení pružin'
+        ],
+        gallery: [
+          'foto-vrata/1.jpeg',
+          'foto-vrata/2.jpeg',
+          'foto-vrata/3.jpg',
+          'foto-vrata/4.jpg'
+        ]
+      }
+    }
+  };
+
+  function openDetail(key) {
+    const data = products[key];
+    if (!data) return;
+
+    const container = document.getElementById('modal-content-area');
+    
+    if (data.isTriple) {
+      function renderItems(arr) {
+        return arr.map(item => {
+          if (item.endsWith('.mp4')) {
+            return `<video muted loop playsinline preload="metadata" onmouseenter="this.play()" onmouseleave="this.pause(); this.currentTime=0;" onclick="openLightbox('${item}', 'video')"><source src="${item}" type="video/mp4"></video>`;
+          } else {
+            return `<img src="${item}" alt="Realizace" onclick="openLightbox('${item}', 'image')">`;
+          }
+        }).join('');
+      }
+
+      function getHeaderMedia(img) {
+        if (img.endsWith('.mp4')) {
+          return `<video class="modal-header-img" autoplay muted loop playsinline><source src="${img}" type="video/mp4"></video>`;
+        } else {
+          return `<img class="modal-header-img" src="${img}" alt="Realizace">`;
+        }
+      }
+
+      let f1 = data.part1.features.map(f => `<li>${f}</li>`).join('');
+      let f2 = data.part2.features.map(f => `<li>${f}</li>`).join('');
+      let f3 = data.part3.features.map(f => `<li>${f}</li>`).join('');
+
+      container.innerHTML = `
+        <span class="modal-tag">${data.tag}</span>
+        <h2 class="modal-title">${data.title}</h2>
+        
+        <div style="margin-top: 24px;">
+          <h3 class="modal-subheading">${data.part1.subtitle}</h3>
+          ${getHeaderMedia(data.part1.img)}
+          <p class="modal-text">${data.part1.text}</p>
+          <div class="tech-features">
+            <h4>Technická přednost & Konstrukce:</h4>
+            <ul>${f1}</ul>
+          </div>
+          <div class="modal-gallery-title">Ukázky realizací</div>
+          <div class="modal-gallery-grid">${renderItems(data.part1.gallery)}</div>
+        </div>
+
+        <div class="modal-section-divider">
+          <h3 class="modal-subheading">${data.part2.subtitle}</h3>
+          ${getHeaderMedia(data.part2.img)}
+          <p class="modal-text">${data.part2.text}</p>
+          <div class="tech-features">
+            <h4>Technická přednost & Konstrukce:</h4>
+            <ul>${f2}</ul>
+          </div>
+          <div class="modal-gallery-title">Ukázky realizací</div>
+          <div class="modal-gallery-grid">${renderItems(data.part2.gallery)}</div>
+        </div>
+
+        <div class="modal-section-divider">
+          <h3 class="modal-subheading">${data.part3.subtitle}</h3>
+          ${getHeaderMedia(data.part3.img)}
+          <p class="modal-text">${data.part3.text}</p>
+          <div class="tech-features">
+            <h4>Technická přednost & Konstrukce:</h4>
+            <ul>${f3}</ul>
+          </div>
+          <div class="modal-gallery-title">Ukázky realizací</div>
+          <div class="modal-gallery-grid">${renderItems(data.part3.gallery)}</div>
+        </div>
+
+        <a href="#kontakt" onclick="closeModalDirect()" class="btn-poptavka">Nezávazně poptat sítě proti hmyzu</a>
+      `;
+    } else if (data.isDouble) {
+      function renderMixedItems(arr) {
+        return arr.map(item => {
+          if (item.endsWith('.mp4')) {
+            return `<video muted loop playsinline preload="metadata" onmouseenter="this.play()" onmouseleave="this.pause(); this.currentTime=0;" onclick="openLightbox('${item}', 'video')"><source src="${item}" type="video/mp4"></video>`;
+          } else {
+            return `<img src="${item}" alt="Realizace" onclick="openLightbox('${item}', 'image')">`;
+          }
+        }).join('');
+      }
+
+      let gallery1Html = renderMixedItems(data.part1.gallery);
+      let features1Html = data.part1.features.map(f => `<li>${f}</li>`).join('');
+      let headerImg1Html = data.part1.img.endsWith('.mp4') 
+        ? `<video class="modal-header-img" autoplay muted loop playsinline><source src="${data.part1.img}" type="video/mp4"></video>`
+        : `<img class="modal-header-img" src="${data.part1.img}" alt="${data.part1.subtitle}">`;
+
+      let gallery2Html = renderMixedItems(data.part2.gallery);
+      let features2Html = data.part2.features.map(f => `<li>${f}</li>`).join('');
+      let headerImg2Html = data.part2.img.endsWith('.mp4') 
+        ? `<video class="modal-header-img" autoplay muted loop playsinline><source src="${data.part2.img}" type="video/mp4"></video>`
+        : `<img class="modal-header-img" src="${data.part2.img}" alt="${data.part2.subtitle}">`;
+
+      container.innerHTML = `
+        <span class="modal-tag">${data.tag}</span>
+        <h2 class="modal-title">${data.title}</h2>
+        
+        <div style="margin-top: 24px;">
+          <h3 class="modal-subheading">${data.part1.subtitle}</h3>
+          ${headerImg1Html}
+          <p class="modal-text">${data.part1.text}</p>
+          <div class="tech-features">
+            <h4>Technická přednost & Konstrukce:</h4>
+            <ul>${features1Html}</ul>
+          </div>
+          <div class="modal-gallery-title">Ukázky realizací</div>
+          <div class="modal-gallery-grid">${gallery1Html}</div>
+        </div>
+
+        <div class="modal-section-divider">
+          <h3 class="modal-subheading">${data.part2.subtitle}</h3>
+          ${headerImg2Html}
+          <p class="modal-text">${data.part2.text}</p>
+          <div class="tech-features">
+            <h4>Technická přednost & Konstrukce:</h4>
+            <ul>${features2Html}</ul>
+          </div>
+          <div class="modal-gallery-title">Ukázky realizací</div>
+          <div class="modal-gallery-grid">${gallery2Html}</div>
+        </div>
+
+        <a href="#kontakt" onclick="closeModalDirect()" class="btn-poptavka">Nezávazně poptat toto řešení</a>
+      `;
+    } else {
+      let galleryHtml = data.single.gallery.map(item => {
+        if (item.endsWith('.mp4')) {
+          return `<video muted loop playsinline preload="metadata" onmouseenter="this.play()" onmouseleave="this.pause(); this.currentTime=0;" onclick="openLightbox('${item}', 'video')"><source src="${item}" type="video/mp4"></video>`;
+        } else {
+          return `<img src="${item}" alt="Realizace" onclick="openLightbox('${item}', 'image')">`;
+        }
+      }).join('');
+      
+      let featuresHtml = data.single.features.map(f => `<li>${f}</li>`).join('');
+
+      let headerImgHtml = data.single.img.endsWith('.mp4')
+        ? `<video class="modal-header-img" autoplay muted loop playsinline><source src="${data.single.img}" type="video/mp4"></video>`
+        : `<img class="modal-header-img" src="${data.single.img}" alt="${data.title}">`;
+
+      container.innerHTML = `
+        <span class="modal-tag">${data.tag}</span>
+        <h2 class="modal-title">${data.title}</h2>
+        ${headerImgHtml}
+        <p class="modal-text">${data.single.text}</p>
+        
+        <div class="tech-features">
+          <h4>Technická přednost & Konstrukce:</h4>
+          <ul>${featuresHtml}</ul>
+        </div>
+
+        <div class="modal-gallery-title">Ukázky realizací</div>
+        <div class="modal-gallery-grid">${galleryHtml}</div>
+
+        <a href="#kontakt" onclick="closeModalDirect()" class="btn-poptavka">Nezávazně poptat toto řešení</a>
+      `;
+    }
+
+    document.getElementById('product-modal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(e) {
+    if (e.target.id === 'product-modal') { closeModalDirect(); }
+  }
+
+  function closeModalDirect() {
+    document.getElementById('product-modal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  function openLightbox(src, type) {
+    const container = document.getElementById('lightbox-content-container');
+    if (type === 'video') {
+      container.innerHTML = `<video autoplay controls muted loop playsinline><source src="${src}" type="video/mp4"></video>`;
+    } else {
+      container.innerHTML = `<img src="${src}" alt="Zvětšená realizace">`;
+    }
+    document.getElementById('lightbox').style.display = 'flex';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    document.getElementById('lightbox-content-container').innerHTML = '';
+  }
+</script>
+</body>
+</html>
